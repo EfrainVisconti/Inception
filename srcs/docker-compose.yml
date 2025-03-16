@@ -1,0 +1,77 @@
+# Se establece una red llamada inception de tipo bridge (comunicación
+# entre contenedores del mismo host) para que los servicios se comuniquen
+# entre sí dentro de la red.
+networks:
+  inception:
+    driver: bridge
+
+# Estos volumenes utilizarán el controlador "local" de Docker,
+# que almacena datos directamente en el sistema de archivos del host.
+# driver_opts: permite configurar opciones avanzadas para el volumen.
+# device: indica la ruta del directorio en el host que se montará dentro del
+# contenedor.
+# o: bind, especifica que el tipo de conexión será un "bind mount", permiten
+# que el directorio del host esté directamente accesible en el contenedor.
+# type: none, indica que no se especifica un sistema de archivos para este
+# volumen, ya que el directorio del host simplemente se monta como está.
+volumes:
+  wordpress:
+    driver: local
+    driver_opts:
+      device: /home/eviscont/data/wordpress
+      o: bind
+      type: none
+  database:
+    driver: local
+    driver_opts:
+      device: /home/eviscont/data/mariadb
+      o: bind
+      type: none
+
+# Los servicios se crean a partir de imagenes personalizadas desde
+# el directorio especificado en build (con Dockerfiles). Además se
+# especifica: nombre del contenedor, red, mapeo de puertos con el host,
+# puertos que exponen a otros servicios, volumenes, variables de entorno
+# y politica de reinicio.
+# depends_on: garantiza que el servicio especificado alli se inicie antes.
+services:
+  nginx:
+    build: requirements/nginx/
+    container_name: nginx
+    networks:
+      - inception
+    ports:
+      - "443:443"
+    depends_on:
+      - wordpress
+    volumes:
+      - wordpress:/var/www/html
+    restart: always
+
+  wordpress:
+    build: requirements/wordpress/
+    container_name: wordpress
+    networks:
+      - inception
+    expose:
+      - 9000
+    depends_on:
+      - mariadb
+    volumes:
+      - wordpress:/var/www/html
+    env_file:
+      - .env
+    restart: always
+
+  mariadb:
+    build: requirements/mariadb/
+    container_name: mariadb
+    networks:
+      - inception
+    expose:
+      - 3306
+    volumes:
+      - database:/var/lib/mysql
+    env_file:
+      - .env
+    restart: always
