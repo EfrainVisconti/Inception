@@ -46,6 +46,8 @@ services:
       - wordpress
     volumes:
       - wordpress:/var/www/html
+    env_file:
+      - .env
     restart: always
 
   wordpress:

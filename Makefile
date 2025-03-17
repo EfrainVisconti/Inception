@@ -6,6 +6,10 @@ all: build up
 build:
 	@echo "Construyendo imágenes..."
 	docker-compose -f $(COMPOSE_FILE) build
+	@sudo mkdir -p /home/eviscont/data/mariadb/
+	@sudo mkdir -p /home/eviscont/data/wordpress/
+	@sudo chown -R 1000:1000 /home/eviscont/data/wordpress
+	@sudo chown -R 1000:1000 /home/eviscont/data/mariadb
 
 # Levanta todos los servicios en segundo plano.
 up:
@@ -26,5 +30,7 @@ re: down up
 prune: down
 	@echo "Limpiando Docker..."
 	docker system prune -a --volumes -f
+	@sudo rm -fr /home/eviscont/data/wordpress
+	@sudo rm -fr /home/eviscont/data/mariadb
 
 .PHONY: all up down re prune

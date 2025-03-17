@@ -1,7 +1,9 @@
-while ! mysqladmin ping -h $WORDPRESS_DB_HOST --silent; do
-    sleep 3;
-    done;
+#!/bin/bash
 
+# while ! mysqladmin ping -h $WORDPRESS_DB_HOST --silent; do
+#     sleep 3;
+#     done;
+sleep 10;
 # Instalar WordPress
 wp core install \
 --url=$DOMAIN_NAME --title="$WP_TITLE" \
@@ -11,4 +13,4 @@ wp core install \
 # Crear usuario adicional
 wp user create $WP_USER $WP_EMAIL --role=author --user_pass=$WP_PASSWORD --allow-root;
 
-php-fpm -F
+exec /usr/sbin/php-fpm7.4 -F
