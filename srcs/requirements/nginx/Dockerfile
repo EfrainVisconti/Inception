@@ -24,7 +24,7 @@ RUN mkdir /etc/nginx/ssl && \
 
 # Copia un archivo de configuración personalizado desde el contexto
 # de construcción a la ubicación estándar de configuración de Nginx.
-COPY conf/nginx.conf /etc/nginx/sites-available/default
+COPY conf/default.conf /etc/nginx/sites-available/default
 
 # Especifica el comando que se ejecutará cuando el contenedor inicie:
 # -g "daemon off;": ejecuta Nginx en el primer plano para que el proceso

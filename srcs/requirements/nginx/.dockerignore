@@ -1,0 +1,12 @@
+# Ignore version control directories
+.git
+.gitignore
+
+# Ignore IDE and editor config files
+.vscode/
+
+# Ignore Docker-related files that shouldn't be copied
+Dockerfile
+
+# Ignore system files
+.DS_Store

@@ -77,3 +77,30 @@ services:
     env_file:
       - .env
     restart: always
+
+  redis:
+    build: requirements/bonus/redis
+    container_name: redis
+    networks:
+      - inception
+    expose:
+      - 6379
+    restart: always
+
+  adminer:
+    build: requirements/bonus/adminer
+    container_name: adminer
+    networks:
+      - inception
+    ports:
+      - "8080:8080"
+    restart: always
+
+  static_web:
+    build: requirements/bonus/static_web/
+    container_name: static_web
+    networks:
+      - inception
+    expose:
+      - 8081
+    restart: always
