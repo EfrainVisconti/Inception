@@ -12,8 +12,8 @@ RUN apt-get update && apt-get install -y \
     php-mysqli \
     php-json \
     wget
-    # apt-get clean && \
-    # rm -rf /var/lib/apt/lists/*
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Crea el directorio para Adminer y descarga la última versión de Adminer.
 RUN mkdir -p /var/www/adminer && \
